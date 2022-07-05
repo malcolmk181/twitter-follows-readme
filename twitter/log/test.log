@@ -1,0 +1,424 @@
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "relationships"[0m
+  [1m[35m (10.2ms)[0m  [1m[35mCREATE TABLE "relationships" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "follower_id" integer, "followed_id" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "tweets"[0m
+  [1m[35m (10.3ms)[0m  [1m[35mCREATE TABLE "tweets" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer NOT NULL, "content" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (10.6ms)[0m  [1m[35mCREATE INDEX "index_tweets_on_user_id" ON "tweets" ("user_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "users"[0m
+  [1m[35m (11.7ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "username" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.2ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atweets" ("id" integer NOT NULL PRIMARY KEY, "user_id" integer NOT NULL, "content" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_atweets_on_user_id" ON "atweets" ("user_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "atweets" ("id","user_id","content","created_at","updated_at")
+                     SELECT "id","user_id","content","created_at","updated_at" FROM "tweets"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE "tweets"[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE TABLE "tweets" ("id" integer NOT NULL PRIMARY KEY, "user_id" integer NOT NULL, "content" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_003928b7f5"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_tweets_on_user_id" ON "tweets" ("user_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[32mINSERT INTO "tweets" ("id","user_id","content","created_at","updated_at")
+                     SELECT "id","user_id","content","created_at","updated_at" FROM "atweets"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "atweets"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (9.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (12.2ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (7.9ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20220628134836)[0m
+  [1m[35m (8.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20220628133224),
+(20220628133355);
+
+[0m
+  [1m[35m (11.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "test"], ["created_at", "2022-06-28 13:58:18.855038"], ["updated_at", "2022-06-28 13:58:18.855038"]]
+  [1m[36mTRANSACTION (10.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.5ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "schema_sha1"], ["value", "13cf1cb43904366abff9e493d4423f87e393df02"], ["created_at", "2022-06-28 13:58:18.872172"], ["updated_at", "2022-06-28 13:58:18.872172"]]
+  [1m[36mTRANSACTION (9.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.6ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.2ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.2ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixtures Load (0.5ms)[0m  [1m[31mDELETE FROM "users";
+DELETE FROM "relationships";
+DELETE FROM "tweets";
+INSERT INTO "users" ("id", "username", "created_at", "updated_at") VALUES (980190962, 'MyString', '2022-06-28 13:58:19.037613', '2022-06-28 13:58:19.037613');
+INSERT INTO "users" ("id", "username", "created_at", "updated_at") VALUES (298486374, 'MyString', '2022-06-28 13:58:19.037613', '2022-06-28 13:58:19.037613');
+INSERT INTO "relationships" ("id", "follower_id", "followed_id", "created_at", "updated_at") VALUES (980190962, 1, 1, '2022-06-28 13:58:19.040445', '2022-06-28 13:58:19.040445');
+INSERT INTO "relationships" ("id", "follower_id", "followed_id", "created_at", "updated_at") VALUES (298486374, 1, 1, '2022-06-28 13:58:19.040445', '2022-06-28 13:58:19.040445');
+INSERT INTO "tweets" ("id", "user_id", "content", "created_at", "updated_at") VALUES (980190962, 980190962, 'MyString', '2022-06-28 13:58:19.042321', '2022-06-28 13:58:19.042321');
+INSERT INTO "tweets" ("id", "user_id", "content", "created_at", "updated_at") VALUES (298486374, 298486374, 'MyString', '2022-06-28 13:58:19.042321', '2022-06-28 13:58:19.042321')[0m
+  [1m[36mTRANSACTION (8.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mPRAGMA foreign_key_check[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------------
+TweetsControllerTest: test_should_update_tweet
+----------------------------------------------
+  [1m[36mTweet Load (0.2ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started PATCH "/tweets/980190962" for 127.0.0.1 at 2022-06-28 09:58:19 -0400
+Processing by TweetsController#update as HTML
+  Parameters: {"tweet"=>{"content"=>"MyString", "user_id"=>"980190962"}, "id"=>"980190962"}
+  [1m[36mTweet Load (0.1ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/tweets/980190962
+Completed 302 Found in 26ms (ActiveRecord: 0.5ms | Allocations: 8076)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------
+TweetsControllerTest: test_should_get_edit
+------------------------------------------
+  [1m[36mTweet Load (0.1ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/tweets/980190962/edit" for 127.0.0.1 at 2022-06-28 09:58:19 -0400
+Processing by TweetsController#edit as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[36mTweet Load (0.2ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering tweets/edit.html.erb within layouts/application
+  Rendered tweets/_form.html.erb (Duration: 280.0ms | Allocations: 347743)
+  Rendered tweets/edit.html.erb within layouts/application (Duration: 282.3ms | Allocations: 348261)
+  Rendered layout layouts/application.html.erb (Duration: 754.7ms | Allocations: 437534)
+Completed 200 OK in 765ms (Views: 759.4ms | ActiveRecord: 0.2ms | Allocations: 440130)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------
+TweetsControllerTest: test_should_get_new
+-----------------------------------------
+  [1m[36mTweet Load (0.1ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/tweets/new" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by TweetsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tweets/new.html.erb within layouts/application
+  Rendered tweets/_form.html.erb (Duration: 5.4ms | Allocations: 788)
+  Rendered tweets/new.html.erb within layouts/application (Duration: 6.6ms | Allocations: 996)
+  Rendered layout layouts/application.html.erb (Duration: 15.2ms | Allocations: 2393)
+Completed 200 OK in 20ms (Views: 18.8ms | ActiveRecord: 0.0ms | Allocations: 2679)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------
+TweetsControllerTest: test_should_show_tweet
+--------------------------------------------
+  [1m[36mTweet Load (0.1ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/tweets/980190962" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by TweetsController#show as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[36mTweet Load (0.2ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering tweets/show.html.erb within layouts/application
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  Rendered tweets/_tweet.html.erb (Duration: 2.4ms | Allocations: 434)
+  Rendered tweets/show.html.erb within layouts/application (Duration: 12.6ms | Allocations: 1200)
+  Rendered layout layouts/application.html.erb (Duration: 16.1ms | Allocations: 2589)
+Completed 200 OK in 19ms (Views: 17.1ms | ActiveRecord: 0.3ms | Allocations: 2983)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------------
+TweetsControllerTest: test_should_create_tweet
+----------------------------------------------
+  [1m[36mTweet Load (0.1ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mTweet Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "tweets"[0m
+Started POST "/tweets" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by TweetsController#create as HTML
+  Parameters: {"tweet"=>{"content"=>"MyString", "user_id"=>"980190962"}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mTweet Create (0.7ms)[0m  [1m[32mINSERT INTO "tweets" ("user_id", "content", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["user_id", 980190962], ["content", "MyString"], ["created_at", "2022-06-28 13:58:20.265814"], ["updated_at", "2022-06-28 13:58:20.265814"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/tweets/980190963
+Completed 302 Found in 8ms (ActiveRecord: 1.2ms | Allocations: 922)
+  [1m[36mTweet Count (1.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "tweets"[0m
+  [1m[36mTweet Load (0.4ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" ORDER BY "tweets"."id" DESC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+TweetsControllerTest: test_should_get_index
+-------------------------------------------
+  [1m[36mTweet Load (0.3ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/tweets" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by TweetsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tweets/index.html.erb within layouts/application
+  [1m[36mTweet Load (0.2ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets"[0m
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 298486374], ["LIMIT", 1]]
+  Rendered tweets/_tweet.html.erb (Duration: 1.9ms | Allocations: 263)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  Rendered tweets/_tweet.html.erb (Duration: 2.7ms | Allocations: 255)
+  Rendered tweets/index.html.erb within layouts/application (Duration: 7.8ms | Allocations: 1139)
+  Rendered layout layouts/application.html.erb (Duration: 19.2ms | Allocations: 2537)
+Completed 200 OK in 22ms (Views: 20.5ms | ActiveRecord: 1.0ms | Allocations: 2838)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------------
+TweetsControllerTest: test_should_destroy_tweet
+-----------------------------------------------
+  [1m[36mTweet Load (0.2ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mTweet Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "tweets"[0m
+Started DELETE "/tweets/980190962" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by TweetsController#destroy as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[36mTweet Load (0.1ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTweet Destroy (0.4ms)[0m  [1m[31mDELETE FROM "tweets" WHERE "tweets"."id" = ?[0m  [["id", 980190962]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/tweets
+Completed 302 Found in 10ms (ActiveRecord: 0.7ms | Allocations: 560)
+  [1m[36mTweet Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "tweets"[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------
+UsersControllerTest: test_should_update_user
+--------------------------------------------
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started PATCH "/users/980190962" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by UsersController#update as HTML
+  Parameters: {"user"=>{"username"=>"MyString"}, "id"=>"980190962"}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Redirected to http://www.example.com/users/980190962
+Completed 302 Found in 5ms (ActiveRecord: 0.1ms | Allocations: 852)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------
+UsersControllerTest: test_should_get_edit
+-----------------------------------------
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/users/980190962/edit" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by UsersController#edit as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering users/edit.html.erb within layouts/application
+  Rendered users/_form.html.erb (Duration: 4.2ms | Allocations: 949)
+  Rendered users/edit.html.erb within layouts/application (Duration: 6.0ms | Allocations: 1263)
+  Rendered layout layouts/application.html.erb (Duration: 9.3ms | Allocations: 2664)
+Completed 200 OK in 17ms (Views: 13.5ms | ActiveRecord: 0.2ms | Allocations: 3458)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+UsersControllerTest: test_should_get_new
+----------------------------------------
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/users/new" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by UsersController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/new.html.erb within layouts/application
+  Rendered users/_form.html.erb (Duration: 1.3ms | Allocations: 544)
+  Rendered users/new.html.erb within layouts/application (Duration: 2.9ms | Allocations: 747)
+  Rendered layout layouts/application.html.erb (Duration: 11.0ms | Allocations: 2144)
+Completed 200 OK in 13ms (Views: 12.1ms | ActiveRecord: 0.0ms | Allocations: 2421)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------
+UsersControllerTest: test_should_show_user
+------------------------------------------
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/users/980190962" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  [1m[36mUser Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."follower_id" WHERE "relationships"."followed_id" = ?[0m  [["followed_id", 980190962]]
+  [1m[36mUser Count (1.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."followed_id" WHERE "relationships"."follower_id" = ?[0m  [["follower_id", 980190962]]
+  Rendered users/_user.html.erb (Duration: 21.4ms | Allocations: 5323)
+  [1m[36mTweet Load (0.3ms)[0m  [1m[34mSELECT "tweets".* FROM "tweets" WHERE "tweets"."user_id" = ?[0m  [["user_id", 980190962]]
+  Rendered users/show.html.erb within layouts/application (Duration: 34.2ms | Allocations: 6518)
+  Rendered layout layouts/application.html.erb (Duration: 39.4ms | Allocations: 7908)
+Completed 200 OK in 45ms (Views: 40.8ms | ActiveRecord: 2.2ms | Allocations: 8302)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------
+UsersControllerTest: test_should_create_user
+--------------------------------------------
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mUser Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "users"[0m
+Started POST "/users" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by UsersController#create as HTML
+  Parameters: {"user"=>{"username"=>"MyString"}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mUser Create (0.7ms)[0m  [1m[32mINSERT INTO "users" ("username", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["username", "MyString"], ["created_at", "2022-06-28 13:58:20.503195"], ["updated_at", "2022-06-28 13:58:20.503195"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/users/980190963
+Completed 302 Found in 12ms (ActiveRecord: 1.1ms | Allocations: 745)
+  [1m[36mUser Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "users"[0m
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" DESC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------
+UsersControllerTest: test_should_get_index
+------------------------------------------
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/users" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[36mUser Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."follower_id" WHERE "relationships"."followed_id" = ?[0m  [["followed_id", 298486374]]
+  [1m[36mUser Count (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."followed_id" WHERE "relationships"."follower_id" = ?[0m  [["follower_id", 298486374]]
+  Rendered users/_user.html.erb (Duration: 11.8ms | Allocations: 967)
+  [1m[36mUser Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."follower_id" WHERE "relationships"."followed_id" = ?[0m  [["followed_id", 980190962]]
+  [1m[36mUser Count (1.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."followed_id" WHERE "relationships"."follower_id" = ?[0m  [["follower_id", 980190962]]
+  Rendered users/_user.html.erb (Duration: 9.6ms | Allocations: 968)
+  Rendered users/index.html.erb within layouts/application (Duration: 26.2ms | Allocations: 2557)
+  Rendered layout layouts/application.html.erb (Duration: 30.7ms | Allocations: 3958)
+Completed 200 OK in 33ms (Views: 28.0ms | ActiveRecord: 3.6ms | Allocations: 4259)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+---------------------------------------------
+UsersControllerTest: test_should_destroy_user
+---------------------------------------------
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mUser Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "users"[0m
+Started DELETE "/users/980190962" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by UsersController#destroy as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mRelationship Load (0.2ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = ?[0m  [["follower_id", 980190962]]
+  [1m[36mRelationship Load (0.4ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."followed_id" = ?[0m  [["followed_id", 980190962]]
+  [1m[36mUser Destroy (1.6ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 980190962]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+Completed 500 Internal Server Error in 15ms (ActiveRecord: 2.7ms | Allocations: 1365)
+UsersControllerTest - test_should_destroy_user: ActiveRecord::InvalidForeignKey raised.
+If you expected this exception, use `assert_raises` as near to the code that raises as possible.
+Other block based assertions (e.g. `assert_difference`) can be used, as long as `assert_raises` is inside their block.
+
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------------------
+RelationshipsControllerTest: test_should_update_relationship
+------------------------------------------------------------
+  [1m[36mRelationship Load (0.2ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started PATCH "/relationships/980190962" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by RelationshipsController#update as HTML
+  Parameters: {"relationship"=>{"followed_id"=>"1", "follower_id"=>"1"}, "id"=>"980190962"}
+  [1m[36mRelationship Load (0.3ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  Rendering layout layouts/application.html.erb
+  Rendering relationships/edit.html.erb within layouts/application
+  Rendered relationships/_form.html.erb (Duration: 15.0ms | Allocations: 2411)
+  Rendered relationships/edit.html.erb within layouts/application (Duration: 16.7ms | Allocations: 2725)
+  Rendered layout layouts/application.html.erb (Duration: 18.6ms | Allocations: 4117)
+Completed 422 Unprocessable Entity in 28ms (Views: 20.4ms | ActiveRecord: 0.7ms | Allocations: 6165)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------------
+RelationshipsControllerTest: test_should_get_edit
+-------------------------------------------------
+  [1m[36mRelationship Load (0.1ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/relationships/980190962/edit" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by RelationshipsController#edit as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[36mRelationship Load (0.2ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering relationships/edit.html.erb within layouts/application
+  Rendered relationships/_form.html.erb (Duration: 2.8ms | Allocations: 843)
+  Rendered relationships/edit.html.erb within layouts/application (Duration: 3.4ms | Allocations: 939)
+  Rendered layout layouts/application.html.erb (Duration: 6.7ms | Allocations: 2319)
+Completed 200 OK in 10ms (Views: 7.5ms | ActiveRecord: 0.2ms | Allocations: 2636)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------
+RelationshipsControllerTest: test_should_get_new
+------------------------------------------------
+  [1m[36mRelationship Load (0.1ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/relationships/new" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by RelationshipsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering relationships/new.html.erb within layouts/application
+  Rendered relationships/_form.html.erb (Duration: 5.6ms | Allocations: 785)
+  Rendered relationships/new.html.erb within layouts/application (Duration: 7.2ms | Allocations: 989)
+  Rendered layout layouts/application.html.erb (Duration: 13.2ms | Allocations: 2386)
+Completed 200 OK in 15ms (Views: 14.1ms | ActiveRecord: 0.0ms | Allocations: 2663)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------------------------
+RelationshipsControllerTest: test_should_show_relationship
+----------------------------------------------------------
+  [1m[36mRelationship Load (0.6ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/relationships/980190962" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by RelationshipsController#show as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[36mRelationship Load (0.1ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering relationships/show.html.erb within layouts/application
+  Rendered relationships/_relationship.html.erb (Duration: 1.2ms | Allocations: 179)
+  Rendered relationships/show.html.erb within layouts/application (Duration: 4.3ms | Allocations: 812)
+  Rendered layout layouts/application.html.erb (Duration: 6.0ms | Allocations: 2201)
+Completed 200 OK in 8ms (Views: 6.6ms | ActiveRecord: 0.1ms | Allocations: 2594)
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------------------
+RelationshipsControllerTest: test_should_create_relationship
+------------------------------------------------------------
+  [1m[36mRelationship Load (0.2ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mRelationship Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "relationships"[0m
+Started POST "/relationships" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by RelationshipsController#create as HTML
+  Parameters: {"relationship"=>{"followed_id"=>"1", "follower_id"=>"1"}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  Rendering layout layouts/application.html.erb
+  Rendering relationships/new.html.erb within layouts/application
+  Rendered relationships/_form.html.erb (Duration: 7.0ms | Allocations: 1631)
+  Rendered relationships/new.html.erb within layouts/application (Duration: 7.5ms | Allocations: 1691)
+  Rendered layout layouts/application.html.erb (Duration: 9.2ms | Allocations: 3071)
+Completed 422 Unprocessable Entity in 21ms (Views: 10.0ms | ActiveRecord: 0.7ms | Allocations: 4031)
+  [1m[36mRelationship Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "relationships"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------------
+RelationshipsControllerTest: test_should_get_index
+--------------------------------------------------
+  [1m[36mRelationship Load (0.6ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+Started GET "/relationships" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by RelationshipsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering relationships/index.html.erb within layouts/application
+  [1m[36mRelationship Load (0.2ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships"[0m
+  Rendered relationships/_relationship.html.erb (Duration: 0.1ms | Allocations: 16)
+  Rendered relationships/_relationship.html.erb (Duration: 0.1ms | Allocations: 15)
+  Rendered relationships/index.html.erb within layouts/application (Duration: 3.6ms | Allocations: 656)
+  Rendered layout layouts/application.html.erb (Duration: 5.6ms | Allocations: 2054)
+Completed 200 OK in 10ms (Views: 8.8ms | ActiveRecord: 0.2ms | Allocations: 2354)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------------------------
+RelationshipsControllerTest: test_should_destroy_relationship
+-------------------------------------------------------------
+  [1m[36mRelationship Load (0.2ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mRelationship Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "relationships"[0m
+Started DELETE "/relationships/980190962" for 127.0.0.1 at 2022-06-28 09:58:20 -0400
+Processing by RelationshipsController#destroy as HTML
+  Parameters: {"id"=>"980190962"}
+  [1m[36mRelationship Load (0.1ms)[0m  [1m[34mSELECT "relationships".* FROM "relationships" WHERE "relationships"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mRelationship Destroy (2.6ms)[0m  [1m[31mDELETE FROM "relationships" WHERE "relationships"."id" = ?[0m  [["id", 980190962]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/relationships
+Completed 302 Found in 13ms (ActiveRecord: 3.2ms | Allocations: 538)
+  [1m[36mRelationship Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "relationships"[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m

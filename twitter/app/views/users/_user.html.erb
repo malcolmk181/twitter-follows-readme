@@ -1,0 +1,27 @@
+<div id="<%= dom_id user %>">
+  <h2>
+    <strong>Username:</strong>
+    <%= user.username %>
+  </h2>
+
+  <% if user.followers.count > 0 %>
+    <h3>Followers</h3>
+    <ul>
+    <% user.followers.each do |f| %>
+      <li><%= link_to f.username, user_path(f) %></li>
+    <% end %>
+    </ul>
+  <% else %>
+  <em><%= user.username %> has no followers :(</em>
+  <% end %>
+
+  <% if user.followeds.count > 0 %>
+    <h3>Following</h3>
+    <ul>
+    <% user.followeds.each do |f| %>
+      <li><%= link_to f.username, user_path(f) %></li>
+    <% end %>
+    </ul>
+  <% end %>
+
+</div>
